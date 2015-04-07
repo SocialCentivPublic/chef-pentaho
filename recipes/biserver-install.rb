@@ -35,7 +35,7 @@ if url != nil
     cwd Chef::Config[:file_cache_path]
     code <<-EOH
       curl -L http://mirrors.ibiblio.org/maven2/fop/fop/0.20.5/fop-0.20.5.jar -o /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar
-      rm /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.94.jar
+      rm /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-*
     EOH
     not_if "test -f /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar"
   end
