@@ -21,12 +21,12 @@ if url != nil
   # tar install
   bash "install pentaho biserver" do
     code <<-EOH
-      mkdir /usr/local/pentaho
-      unzip #{download_path} -d /usr/local/pentaho
+      mkdir #{ node['pentaho']['biserver']['install_dir'] }
+      unzip #{ download_path } -d #{ node['pentaho']['biserver']['install_dir'] }
     EOH
-    only_if "test ! -d /usr/local/pentaho/biserver-ce"
+    only_if "test ! -d #{ node['pentaho']['biserver']['bi_dir'] }"
   end
-  file "/usr/local/pentaho/biserver-ce/promptuser.sh" do
+  file "#{ node['pentaho']['biserver']['bi_dir'] }/promptuser.sh" do
     action :delete
   end
 
@@ -34,13 +34,20 @@ if url != nil
   bash "replace fop.jar" do
     cwd Chef::Config[:file_cache_path]
     code <<-EOH
-      curl -L http://mirrors.ibiblio.org/maven2/fop/fop/0.20.5/fop-0.20.5.jar -o /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar
-      rm /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-*
+      curl -L http://mirrors.ibiblio.org/maven2/fop/fop/0.20.5/fop-0.20.5.jar -o #{ node['pentaho']['biserver']['bi_dir'] }/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar
+      rm #{ node['pentaho']['biserver']['bi_dir'] }/tomcat/webapps/pentaho/WEB-INF/lib/fop-*
     EOH
-    not_if "test -f /usr/local/pentaho/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar"
+    not_if "test -f #{ node['pentaho']['biserver']['bi_dir'] }/biserver-ce/tomcat/webapps/pentaho/WEB-INF/lib/fop-0.20.5.jar"
   end
 
-  template "/usr/local/pentaho/biserver-ce/pentaho-solutions/system/publisher_config.xml" do
+  template "#{ node['pentaho']['biserver']['bi_dir'] }/tomcat/bin/ESAPI.properties" do
+    source "ESAPI.properties.erb"
+    owner  "root"
+    group  "root"
+    mode   "644"
+  end
+
+  template "#{ node['pentaho']['biserver']['bi_dir'] }/pentaho-solutions/system/publisher_config.xml" do
     source "publisher_config.xml.erb"
     owner "root"
     group "root"
