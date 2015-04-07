@@ -48,7 +48,7 @@ if url != nil
   end
 
   template "#{ node['pentaho']['biserver']['bi_dir'] }/tomcat/bin/validation.properties" do
-    source "ESAPI.properties.erb"
+    source "validation.properties.erb"
     owner  "root"
     group  "root"
     mode   "644"
