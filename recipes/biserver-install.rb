@@ -47,6 +47,13 @@ if url != nil
     mode   "644"
   end
 
+  template "#{ node['pentaho']['biserver']['bi_dir'] }/tomcat/bin/validation.properties" do
+    source "ESAPI.properties.erb"
+    owner  "root"
+    group  "root"
+    mode   "644"
+  end
+
   template "#{ node['pentaho']['biserver']['bi_dir'] }/pentaho-solutions/system/publisher_config.xml" do
     source "publisher_config.xml.erb"
     owner "root"
